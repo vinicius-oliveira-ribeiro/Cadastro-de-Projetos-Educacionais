@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Projetos Educacionais</title>
+    <link rel="stylesheet" href="./style/styles.css">
+</head>
+<body>
+    <h1>Cadastro de Projetos Educacionais</h1>
+    <form id="form-projeto" action="http://127.0.0.1:5500/projetos" method="post">
+        <label for="projeto">Projeto:</label>
+        <input type="text" id="projeto" name="projeto">
+        <label for="serie">Série:</label>
+        <input type="text" id="serie" name="serie">
+        <label for="professor">Professor:</label>
+        <input type="text" id="professor" name="professor">
+        <label for="descricao">Descrição:</label>
+        <input type="text" id="descricao" name="descricao">
+        <button type="submit">Adicionar</button>
+        <div id="mensagem"></div> <!-- Div para exibir mensagem de sucesso ou erro -->
+    </form>
+   <script src="./script.js"></script>
+</body>
+</html>

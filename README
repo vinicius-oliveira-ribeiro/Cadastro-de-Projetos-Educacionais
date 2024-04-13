@@ -1,0 +1,68 @@
+
+Cadastro de Projetos Educacionais
+Este projeto é uma aplicação para cadastrar projetos educacionais. Ele inclui um servidor backend que se comunica com um banco de dados PostgreSQL para armazenar os dados dos projetos e uma interface web frontend para permitir que os usuários adicionem novos projetos.
+
+Como Rodar o Projeto
+Pré-requisitos
+
+Node.js instalado na sua máquina
+
+Docker instalado na sua máquina (para rodar o banco de dados PostgreSQL localmente)
+
+Instalação
+
+Clone o repositório do GitHub para a sua máquina local:
+
+bash
+
+Copy code
+
+git clone https://github.com/seu-usuario/cadastro-de-projetos-educacionais.git
+
+Navegue até o diretório do projeto:
+
+bash
+
+Copy code
+
+cd cadastro-de-projetos-educacionais
+
+Instale as dependências do backend e do frontend:
+
+Copy code
+
+npm install
+
+Configuração do Banco de Dados PostgreSQL (usando Docker)
+
+Se você já possui um banco de dados PostgreSQL configurado, pode pular esta seção.
+
+Baixe a imagem Docker do PostgreSQL:
+Copy code
+
+docker pull postgres
+
+Inicie o container do PostgreSQL:
+
+css
+
+Copy code
+
+docker run --name cadastro-projetos-db -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -p 5432:5432 -d postgres
+
+Configuração do Banco de Dados
+Crie um banco de dados PostgreSQL chamado cadastro_projetos_educacionais.
+
+Execute o script create_table.sql para criar a tabela necessária no banco de dados.
+
+Execução do Servidor
+Execute o servidor backend:
+sql
+Copy code
+npm start
+O servidor estará rodando em http://localhost:5500.
+Utilização da Interface Web
+Abra o navegador web e acesse http://localhost:5500 para acessar a interface web.
+
+Você poderá adicionar novos projetos educacionais preenchendo o formulário e clicando no botão "Adicionar".
+
