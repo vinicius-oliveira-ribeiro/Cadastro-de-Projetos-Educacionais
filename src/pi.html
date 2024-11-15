@@ -5,21 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Projetos Educacionais</title>
     <link rel="stylesheet" href="./style/styles.css">
+    <style>
+        .error {
+            border: 2px solid red;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
     <h1>Cadastro de Projetos Educacionais</h1>
+    <h2><a href="consulta.html">Consulta</a></h2>
     <form id="form-projeto" action="http://127.0.0.1:3333/projetos" method="post">
         <label for="projeto">Projeto:</label>
         <input type="text" id="projeto" name="projeto">
+        <span class="error-message" id="projeto-error"></span>
+    
         <label for="serie">Série:</label>
         <input type="text" id="serie" name="serie">
+        <span class="error-message" id="serie-error"></span>
+    
         <label for="professor">Professor:</label>
         <input type="text" id="professor" name="professor">
+        <span class="error-message" id="professor-error"></span>
+    
         <label for="descricao">Descrição:</label>
         <input type="text" id="descricao" name="descricao">
+        <span class="error-message" id="descricao-error"></span>
+    
+        <label for="dataInicio">Data Início:</label>
+        <input type="date" id="dataInicio" name="dataInicio">
+        <span class="error-message" id="dataInicio-error"></span>
+    
+        <label for="dataFim">Data Fim:</label>
+        <input type="date" id="dataFim" name="dataFim">
+        <span class="error-message" id="dataFim-error"></span>
+
         <button type="submit">Adicionar</button>
         <div id="mensagem"></div> <!-- Div para exibir mensagem de sucesso ou erro -->
     </form>
-   <script src="./script.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>
