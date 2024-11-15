@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log('Dados do formulário:', jsonData);
 
-        fetch('http://127.0.0.1:5500/projetos', {
+        fetch('http://127.0.0.1:3333/projetos', {
             method: 'POST',
             body: JSON.stringify(jsonData),
             headers: {
