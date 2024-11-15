@@ -73,10 +73,10 @@ CREATE TABLE public.projetos_educacionais (
     serie VARCHAR,
     professor VARCHAR,
     descricao VARCHAR,
-	data_inicio TIMESTAMP ,
-	data_fim TIMESTAMP ,
-	created_at TIMESTAMP ,
-	updated_at TIMESTAMP 
+    data_inicio TIMESTAMP,
+    data_fim TIMESTAMP,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP
 );
 
 SELECT * FROM public.projetos_educacionais;
@@ -96,3 +96,4 @@ FOR EACH ROW
 EXECUTE PROCEDURE update_updated_at_column();
 
 docker run --name pg  -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -p 5432:5432 -d postgres
+docker run --name cadastro-projetos-db -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -p 5432:5432 -d postgres
