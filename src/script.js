@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Função para buscar os dados da API e exibi-los em cards
     function buscarProjetos() {
-        fetch('http://127.0.0.1:3333/projetos') // Substitua pela URL correta da sua API
+        fetch('https://cadastro-de-projetos-educacionais-jvmk-9vpnxvtvz.vercel.app/projetos') // Substitua pela URL correta da sua API
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erro ao buscar os dados');
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('Dados do formulário:', jsonData);
 
         // Envia os dados ao servidor
-        fetch('http://127.0.0.1:3333/projetos', {
+        fetch('https://cadastro-de-projetos-educacionais-jvmk-9vpnxvtvz.vercel.app/projetos', {
             method: 'POST',
             body: JSON.stringify(jsonData),
             headers: {
