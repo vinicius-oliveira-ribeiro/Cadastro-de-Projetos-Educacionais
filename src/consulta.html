@@ -5,12 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta de Projetos Educacionais</title>
     <link rel="stylesheet" href="./style/styles.css">
+    <style>
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .voltar-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #696969;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .voltar-btn:hover {
+            background-color: #505050;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 20px;
+            justify-items: center;
+        }
+
+        .card {
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px 20px;
+            width: 100%;
+            font-family: Arial, sans-serif;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .card p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        @media (max-width: 1024px) {
+            .cards-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Consulta de Projetos Educacionais</h1>
+    <header>
+        <h1>Consulta de Projetos Educacionais</h1>
+        <a href="pi.html" class="voltar-btn">Voltar</a>
+    </header>
 
-    <!-- Div para exibir os resultados da consulta -->
-    <div id="resultado-consulta"></div>
+    <div class="cards-container" id="resultado-consulta">
+    </div>
 
     <script src="./script.js"></script>
 </body>

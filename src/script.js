@@ -1,24 +1,53 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Função para buscar os dados da API
-    fetch('http://127.0.0.1:3333/projetos') // Substitua pela URL correta da sua API
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao buscar os dados');
-            }
-            return response.json(); // Retorna os dados no formato JSON
-        })
-        .then(data => {
-            // Obtém o elemento onde o JSON será exibido
-            const resultadoConsulta = document.getElementById('resultado-consulta');
+    // Função para buscar os dados da API e exibi-los em cards
+    function buscarProjetos() {
+        fetch('http://127.0.0.1:3333/projetos') // Substitua pela URL correta da sua API
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar os dados');
+                }
+                return response.json(); // Retorna os dados no formato JSON
+            })
+            .then(data => {
+                const resultadoConsulta = document.getElementById('resultado-consulta');
 
-            // Exibe os dados do JSON na página
-            resultadoConsulta.textContent = JSON.stringify(data, null, 4);  // Formata o JSON com indentação de 4 espaços
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-            const resultadoConsulta = document.getElementById('resultado-consulta');
-            resultadoConsulta.textContent = 'Erro ao carregar os dados. Tente novamente mais tarde.';
-        });
+                // Limpa o container antes de adicionar os dados
+                resultadoConsulta.innerHTML = '';
+
+                if (data.data && data.data.length > 0) {
+                    // Itera pelos dados e cria cards para cada item
+                    data.data.forEach(projeto => {
+                        const card = document.createElement('div');
+                        card.classList.add('card');
+
+                        // Adiciona os dados ao card
+                        card.innerHTML = `
+                            <h3>${projeto.nome_projeto || 'Sem Título'}</h3>
+                            <p><strong>ID:</strong> ${projeto.id}</p>
+                            <p><strong>Série:</strong> ${projeto.serie || 'Não informado'}</p>
+                            <p><strong>Professor:</strong> ${projeto.professor || 'Não informado'}</p>
+                            <p><strong>Descrição:</strong> ${projeto.descricao || 'Não informado'}</p>
+                            <p><strong>Data Início:</strong> ${projeto.data_inicio ? new Date(projeto.data_inicio).toLocaleDateString('pt-BR') : 'Não informado'}</p>
+                            <p><strong>Data Fim:</strong> ${projeto.data_fim ? new Date(projeto.data_fim).toLocaleDateString('pt-BR') : 'Não informado'}</p>
+                        `;
+
+                        // Adiciona o card ao container
+                        resultadoConsulta.appendChild(card);
+                    });
+                } else {
+                    // Exibe mensagem caso não haja dados
+                    resultadoConsulta.textContent = 'Nenhum projeto encontrado.';
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                const resultadoConsulta = document.getElementById('resultado-consulta');
+                resultadoConsulta.textContent = 'Erro ao carregar os dados. Tente novamente mais tarde.';
+            });
+    }
+
+    // Chama a função para buscar os projetos ao carregar a página
+    buscarProjetos();
 
     // Escuta o evento de envio do formulário
     document.getElementById('form-projeto').addEventListener('submit', function (event) {

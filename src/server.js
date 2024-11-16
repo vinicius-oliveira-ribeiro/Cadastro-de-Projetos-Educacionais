@@ -11,11 +11,10 @@ app.use(cors({
   allowedHeaders: 'Content-Type,Authorization'
 }));
 
-// String de conexão do Supabase
 const connectionString = 'postgresql://postgres.eziizwbwbzhnjzvniidc:j0hCrNefHPnFu6DO@aws-0-sa-east-1.pooler.supabase.com:6543/postgres';
 
 const pool = new Pool({
-  connectionString, // Passa a string de conexão completa
+  connectionString,
 });
 
 pool.connect((err, client, release) => {
@@ -26,17 +25,14 @@ pool.connect((err, client, release) => {
   release();
 });
 
-// Rota POST para inserir dados no banco
 app.post('/projetos', async (req, res) => {
   const { projeto, serie, professor, descricao, dataInicio, dataFim } = req.body;
 
   console.log('Dados recebidos do formulário:', { projeto, serie, professor, descricao, dataInicio, dataFim });
 
   try {
-    // Inicia uma transação
     await pool.query('BEGIN');
 
-    // Insere os dados na tabela
     const result = await pool.query(
       `INSERT INTO public.projetos_educacionais 
       (nome_projeto, serie, professor, descricao, data_inicio, data_fim) 
@@ -46,21 +42,17 @@ app.post('/projetos', async (req, res) => {
 
     console.log('Dados salvos no banco de dados com sucesso:', result.rows[0]);
 
-    // Commit da transação
     await pool.query('COMMIT');
     res.status(201).json({ message: 'Dados salvos com sucesso', data: result.rows[0] });
   } catch (err) {
-    // Caso ocorra um erro, realiza o rollback
     await pool.query('ROLLBACK');
     console.error('Erro ao salvar os dados no banco de dados:', err);
     res.status(500).json({ error: 'Erro ao salvar os dados' });
   }
 });
 
-// Rota GET para consultar os projetos no banco
 app.get('/projetos', async (req, res) => {
   try {
-    // Consulta os dados na tabela
     const result = await pool.query('SELECT * FROM public.projetos_educacionais');
     console.log('Dados consultados com sucesso:', result.rows);
 
@@ -71,6 +63,5 @@ app.get('/projetos', async (req, res) => {
   }
 });
 
-// Porta do servidor
 const PORT = process.env.PORT || 3333;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
