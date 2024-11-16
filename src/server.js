@@ -18,7 +18,8 @@ const pool = new Pool({
 });
 
 pool.connect((err, client, release) => {
-  if (err) {
+  if (err) 
+  {
     return console.error('Erro ao conectar ao banco de dados:', err);
   }
   console.log('Conexão com o banco de dados Supabase estabelecida');
@@ -30,7 +31,8 @@ app.post('/projetos', async (req, res) => {
 
   console.log('Dados recebidos do formulário:', { projeto, serie, professor, descricao, dataInicio, dataFim });
 
-  try {
+  try 
+  {
     await pool.query('BEGIN');
 
     const result = await pool.query(
@@ -44,7 +46,9 @@ app.post('/projetos', async (req, res) => {
 
     await pool.query('COMMIT');
     res.status(201).json({ message: 'Dados salvos com sucesso', data: result.rows[0] });
-  } catch (err) {
+  } 
+  catch (err)
+  {
     await pool.query('ROLLBACK');
     console.error('Erro ao salvar os dados no banco de dados:', err);
     res.status(500).json({ error: 'Erro ao salvar os dados' });
@@ -52,12 +56,15 @@ app.post('/projetos', async (req, res) => {
 });
 
 app.get('/projetos', async (req, res) => {
-  try {
+  try 
+  {
     const result = await pool.query('SELECT * FROM public.projetos_educacionais');
     console.log('Dados consultados com sucesso:', result.rows);
 
     res.status(200).json({ data: result.rows });
-  } catch (err) {
+  } 
+  catch (err) 
+  {
     console.error('Erro ao consultar os dados no banco de dados:', err);
     res.status(500).json({ error: 'Erro ao consultar os dados' });
   }
