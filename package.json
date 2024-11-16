@@ -1,6 +1,9 @@
 {
   "name": "cadastro-de-projetos",
   "main": "src/server.js",
+  "engines": {
+    "node": "18.17.0"
+  },
   "scripts": {
     "start": "node src/server.js"
   },
