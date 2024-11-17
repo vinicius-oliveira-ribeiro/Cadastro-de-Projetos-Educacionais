@@ -1,7 +1,10 @@
-
 Cadastro de Projetos Educacionais
-Este projeto é uma aplicação para cadastrar projetos educacionais. Ele inclui um servidor backend que se comunica com um banco de dados PostgreSQL para armazenar os dados dos projetos e uma interface web frontend para permitir que os usuários adicionem novos projetos.
+Este projeto é uma aplicação para cadastrar projetos educacionais. Ele inclui:
 
+Um frontend, hospedado na Vercel, que oferece uma interface web moderna para que os usuários possam adicionar e visualizar projetos.
+Um backend, hospedado no Supabase, que gerencia as regras de negócio e a lógica de aplicação.
+Uma API de comunicação com o banco de dados, hospedada no Render, conectando o backend ao banco de dados PostgreSQL, utilizado para armazenar e gerenciar os dados dos projetos.
+Essa arquitetura garante um fluxo eficiente e integrado para o gerenciamento de projetos educacionais.
 Como Rodar o Projeto
 Pré-requisitos
 
@@ -96,4 +99,3 @@ FOR EACH ROW
 EXECUTE PROCEDURE update_updated_at_column();
 
 docker run --name pg  -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -p 5432:5432 -d postgres
-docker run --name cadastro-projetos-db -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -p 5432:5432 -d postgres

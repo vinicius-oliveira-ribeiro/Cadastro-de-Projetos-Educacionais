@@ -58,7 +58,7 @@ app.post('/projetos', async (req, res) => {
 app.get('/projetos', async (req, res) => {
   try 
   {
-    const result = await pool.query('SELECT * FROM public.projetos_educacionais');
+    const result = await pool.query('SELECT * FROM public.projetos_educacionais ORDER BY id DESC');
     console.log('Dados consultados com sucesso:', result.rows);
 
     res.status(200).json({ data: result.rows });
