@@ -11,7 +11,7 @@ app.use(cors({
   allowedHeaders: 'Content-Type,Authorization'
 }));
 
-const connectionString = 'postgresql://postgres.aozfzfjykqvnjxgxkdnp @aws-0-us-east-2.pooler.supabase.com:6543/postgres';
+const connectionString = 'postgresql://postgres.aozfzfjykqvnjxgxkdnp:[nBEyRfeeLJ2N1djn]@aws-0-us-east-2.pooler.supabase.com:6543/postgres';
 
 const pool = new Pool({
   connectionString,
