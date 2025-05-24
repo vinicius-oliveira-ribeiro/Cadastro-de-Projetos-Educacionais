@@ -11,11 +11,16 @@ app.use(cors({
   allowedHeaders: 'Content-Type,Authorization'
 }));
 
-const connectionString = 'postgresql://postgres.aozfzfjykqvnjxgxkdnp:nBEyRfeeLJ2N1djn@aws-0-us-east-2.pooler.supabase.com:6543/postgres';
+const connectionString = 'postgresql://postgres:PeLD15VqkNmasJpb@db.aozfzfjykqvnjxgxkdnp.supabase.co:5432/postgres';
 
 
 const pool = new Pool({
   connectionString,
+  ssl: {
+    rejectUnauthorized: false
+  },
+  connectionTimeoutMillis: 5000,
+  query_timeout: 10000
 });
 
 pool.connect((err, client, release) => {
