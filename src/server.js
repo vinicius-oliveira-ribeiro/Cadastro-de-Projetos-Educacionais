@@ -16,11 +16,6 @@ const connectionString = 'postgresql://postgres:PeLD15VqkNmasJpb@db.aozfzfjykqvn
 
 const pool = new Pool({
   connectionString,
-  ssl: {
-    rejectUnauthorized: false
-  },
-  connectionTimeoutMillis: 5000,
-  query_timeout: 10000
 });
 
 pool.connect((err, client, release) => {
