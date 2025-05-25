@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const baseUrl ="https://cadastro-de-projetos-educacionais.onrender.com";
+    const baseUrl ="cadastro-de-projetos-educacionais-production.up.railway.app";
     
     function buscarProjetos() 
     {
