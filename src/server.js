@@ -18,13 +18,14 @@ app.use(cors());
 
 // Configuração do banco de dados
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: 'postgresql://postgres.aozfzfjykqvnjxgxkdnp:PeLD15VqkNmasJpb@aws-0-us-east-2.pooler.supabase.com:5432/postgres',
   ssl: {
     rejectUnauthorized: false
   },
   max: 20, // máximo de conexões no pool
   idleTimeoutMillis: 30000, // tempo máximo que uma conexão pode ficar inativa
   connectionTimeoutMillis: 5000, // tempo máximo para estabelecer conexão
+  family: 4 // Força o uso de IPv4
 });
 
 // Adiciona listener para erros de conexão
