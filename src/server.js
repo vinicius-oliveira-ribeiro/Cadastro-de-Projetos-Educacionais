@@ -2,6 +2,7 @@ const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
 require('dotenv').config();
+const dns = require('dns').promises;
 
 const app = express();
 
@@ -38,24 +39,24 @@ app.use((req, res, next) => {
 });
 
 // Configuração do banco de dados
-const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:PeLD15VqkNmasJpb@db.aozfzfjykqvnjxgxkdnp.supabase.co:5432/postgres';
-
 const pool = new Pool({
-  connectionString,
+  user: 'postgres',
+  password: 'PeLD15VqkNmasJpb',
+  database: 'postgres',
+  port: 5432,
+  // Forçar conexão IPv4
+  host: 'db.aozfzfjykqvnjxgxkdnp.supabase.co',
   ssl: {
     rejectUnauthorized: false
   },
-  // Configurações adicionais para melhorar a conectividade
+  // Configurações adicionais
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
   application_name: 'cadastro_projetos',
-  // Forçar IPv4
-  host: 'db.aozfzfjykqvnjxgxkdnp.supabase.co',
-  port: 5432,
-  user: 'postgres',
-  password: 'PeLD15VqkNmasJpb',
-  database: 'postgres'
+  // Configurações específicas para IPv4
+  keepAlive: true,
+  keepAliveInitialDelayMillis: 10000
 });
 
 // Adicionar mais logging para debug
@@ -63,23 +64,42 @@ pool.on('connect', () => {
   console.log('Nova conexão estabelecida com o banco de dados');
 });
 
-pool.on('acquire', () => {
-  console.log('Conexão obtida do pool');
-});
-
-pool.on('remove', () => {
-  console.log('Conexão removida do pool');
-});
-
-// Evento de erro na pool
 pool.on('error', (err) => {
   console.error('Erro inesperado no pool de conexões:', err);
+  // Tentar reconectar em caso de erro
+  setTimeout(() => {
+    console.log('Tentando reconectar...');
+    pool.connect();
+  }, 5000);
 });
+
+// Função para resolver DNS manualmente
+async function resolverEnderecoIPv4() {
+  try {
+    console.log('Resolvendo endereço DNS...');
+    const addresses = await dns.resolve4('db.aozfzfjykqvnjxgxkdnp.supabase.co');
+    console.log('Endereços IPv4 disponíveis:', addresses);
+    if (addresses && addresses.length > 0) {
+      return addresses[0];
+    }
+  } catch (err) {
+    console.error('Erro ao resolver DNS:', err);
+  }
+  return null;
+}
 
 // Teste de conexão com retry
 async function conectarBancoDados(tentativas = 5) {
+  // Primeiro resolve o endereço IPv4
+  const ipv4Address = await resolverEnderecoIPv4();
+  if (ipv4Address) {
+    console.log('Usando endereço IPv4:', ipv4Address);
+    pool.options.host = ipv4Address;
+  }
+
   for (let i = 0; i < tentativas; i++) {
     try {
+      console.log(`Tentativa ${i + 1} de ${tentativas} - Conectando ao host: ${pool.options.host}`);
       const client = await pool.connect();
       console.log('Conexão com o banco de dados Supabase estabelecida');
       client.release();
