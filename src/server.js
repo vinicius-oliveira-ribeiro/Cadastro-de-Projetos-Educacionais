@@ -18,15 +18,13 @@ app.use(cors());
 
 // Configuração do banco de dados
 const pool = new Pool({
-  user: 'postgres',
-  password: 'PeLD15VqkNmasJpb',
-  host: 'db.aozfzfjykqvnjxgxkdnp.supabase.co',
-  port: 5432,
-  database: 'postgres',
-  ssl: { rejectUnauthorized: false },
-  family: 4,  // Força o uso de IPv4
-  connectionTimeoutMillis: 5000, // Timeout de 5 segundos
-  query_timeout: 10000 // Timeout de 10 segundos para queries
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  },
+  max: 20, // máximo de conexões no pool
+  idleTimeoutMillis: 30000, // tempo máximo que uma conexão pode ficar inativa
+  connectionTimeoutMillis: 5000, // tempo máximo para estabelecer conexão
 });
 
 // Adiciona listener para erros de conexão
@@ -37,6 +35,9 @@ pool.on('error', (err) => {
 // Função para testar a conexão
 async function testarConexao() {
   try {
+    console.log('Tentando conectar ao banco de dados...');
+    console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Definida' : 'Não definida');
+    
     const client = await pool.connect();
     console.log('Conexão com o banco de dados estabelecida com sucesso');
     const result = await client.query('SELECT NOW()');
@@ -44,7 +45,11 @@ async function testarConexao() {
     client.release();
     return true;
   } catch (err) {
-    console.error('Erro ao testar conexão:', err);
+    console.error('Erro detalhado ao testar conexão:', {
+      message: err.message,
+      code: err.code,
+      stack: err.stack
+    });
     return false;
   }
 }
