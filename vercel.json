@@ -6,10 +6,20 @@
             "use": "@vercel/node"
         }
     ],
-    "routes":[
+    "routes": [
         {
-            "src": ".*",
-            "dest": "src/server.js"
+            "src": "/(.*)",
+            "dest": "src/server.js",
+            "methods": ["GET", "POST", "OPTIONS"],
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
+            }
         }
-    ]
+    ],
+    "env": {
+        "DATABASE_URL": "@database_url",
+        "NODE_OPTIONS": "--dns-result-order=ipv4first"
+    }
 }
