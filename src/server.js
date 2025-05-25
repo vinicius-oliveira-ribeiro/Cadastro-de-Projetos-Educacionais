@@ -33,44 +33,15 @@ pool.on('error', (err) => {
   console.error('Erro inesperado no pool de conexão:', err);
 });
 
-// Função para testar a conexão
-async function testarConexao() {
+// Função para fechar o pool de conexões
+const closePool = async () => {
   try {
-    console.log('Tentando conectar ao banco de dados...');
-    console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Definida' : 'Não definida');
-    
-    const client = await pool.connect();
-    console.log('Conexão com o banco de dados estabelecida com sucesso');
-    const result = await client.query('SELECT NOW()');
-    console.log('Teste de query executado com sucesso:', result.rows[0]);
-    client.release();
-    return true;
+    await pool.end();
+    console.log('Pool de conexões fechado');
   } catch (err) {
-    console.error('Erro detalhado ao testar conexão:', {
-      message: err.message,
-      code: err.code,
-      stack: err.stack
-    });
-    return false;
+    console.error('Erro ao fechar pool:', err);
   }
-}
-
-// Rota de healthcheck
-app.get('/health', async (req, res) => {
-  try {
-    const dbConnected = await testarConexao();
-    res.json({
-      status: 'ok',
-      timestamp: new Date().toISOString(),
-      database: dbConnected ? 'connected' : 'disconnected'
-    });
-  } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      error: err.message
-    });
-  }
-});
+};
 
 // Rota para listar projetos
 app.get('/projetos', async (req, res) => {
@@ -98,11 +69,18 @@ app.get('/projetos', async (req, res) => {
 app.post('/projetos', async (req, res) => {
   let client;
   try {
+    const { projeto, serie, professor, descricao, dataInicio, dataFim } = req.body;
+    
+    // Validação dos campos obrigatórios
+    if (!projeto || !serie || !professor || !descricao || !dataInicio || !dataFim) {
+      return res.status(500).json({ 
+        error: 'Todos os campos são obrigatórios' 
+      });
+    }
+
     client = await pool.connect();
     console.log('POST /projetos - Conexão obtida');
     console.log('Request body:', req.body);
-    
-    const { projeto, serie, professor, descricao, dataInicio, dataFim } = req.body;
     
     const result = await client.query(
       `INSERT INTO public.projetos_educacionais 
@@ -125,8 +103,31 @@ app.post('/projetos', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-  // Testa a conexão assim que o servidor iniciar
-  testarConexao();
-});
+
+let server;
+if (process.env.NODE_ENV !== 'test') {
+  server = app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+  });
+
+  // Gerenciamento de encerramento gracioso
+  process.on('SIGTERM', () => {
+    console.log('Recebido sinal SIGTERM. Iniciando encerramento gracioso...');
+    server.close(async () => {
+      console.log('Servidor HTTP fechado.');
+      await closePool();
+      process.exit(0);
+    });
+  });
+
+  process.on('SIGINT', () => {
+    console.log('Recebido sinal SIGINT. Iniciando encerramento gracioso...');
+    server.close(async () => {
+      console.log('Servidor HTTP fechado.');
+      await closePool();
+      process.exit(0);
+    });
+  });
+}
+
+module.exports = app;
