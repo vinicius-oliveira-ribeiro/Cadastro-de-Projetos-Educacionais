@@ -23,7 +23,8 @@ const pool = new Pool({
   host: 'db.aozfzfjykqvnjxgxkdnp.supabase.co',
   port: 5432,
   database: 'postgres',
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
+  family: 4  // Força o uso de IPv4
 });
 
 // Função para testar a conexão
