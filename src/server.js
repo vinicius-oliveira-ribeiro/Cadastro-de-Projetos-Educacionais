@@ -24,7 +24,14 @@ const pool = new Pool({
   port: 5432,
   database: 'postgres',
   ssl: { rejectUnauthorized: false },
-  family: 4  // Força o uso de IPv4
+  family: 4,  // Força o uso de IPv4
+  connectionTimeoutMillis: 5000, // Timeout de 5 segundos
+  query_timeout: 10000 // Timeout de 10 segundos para queries
+});
+
+// Adiciona listener para erros de conexão
+pool.on('error', (err) => {
+  console.error('Erro inesperado no pool de conexão:', err);
 });
 
 // Função para testar a conexão
